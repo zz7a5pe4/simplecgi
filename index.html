@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head runat="server">
+     <title>Lesson 1 - Demo 1 - IFrame "Ajax"</title>
+     <script language="javascript">
+	var toload = 0
+         function refresh()
+         {
+             post_to_url("http://165.114.86.227:8000/cgi-bin/serverfun.py", {'q':'a'})
+	     //document.getElementById('resultframe').src = 
+	     //"http://165.114.86.227:8081/esp"
+	     toload = 1
+         }
+	function readresult()
+         {
+	    if (toload == 1)
+	    { 
+             document.getElementById('resultframe').src = 
+             "http://165.114.86.227:8081/esp"
+             toload = 0
+	    }
+
+         }
+	function post_to_url(path, params, method) {
+            method = method || "post"; // Set method to post by default, if not specified.
+
+            // The rest of this code assumes you are not using a library.
+            // It can be made less wordy if you use one.
+            var form = document.createElement("form");
+            form.setAttribute("method", method);
+            form.setAttribute("action", path);
+	    form.setAttribute("target", "h");
+            for(var key in params) {
+                if(params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
+
+                    form.appendChild(hiddenField);
+                 }
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+     </script>
+  </head>
+<body>
+
+First name: <input type="text" name="FirstName" value="Mickey" /><br />
+Last name: <input type="text" name="LastName" value="Mouse" /><br />
+<input type="submit" value="Submit" onclick="refresh()"/>
+
+<iframe name="h" id="resultframe" onload="readresult()"></iframe>
+
+</body>
+</html>
