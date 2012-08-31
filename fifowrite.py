@@ -28,7 +28,7 @@ def main():
     try:
         os.unlink(my_address)
     except OSError, e:
-            print "Failed to create FIFO: %s" % e
+        print "Failed to create FIFO: %s" % e
     sock.bind(my_address)
     #print >>sys.stderr, 'connecting to %s' % server_address
     try:

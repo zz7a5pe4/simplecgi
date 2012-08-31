@@ -102,13 +102,16 @@ class CmdDaemon:
     def do_request(self, request, result_df):
         """ process request and write result to result_df """
         child = pexpect.spawn (request)
-        t = open(result_df, "w")
+        #index = p.expect ([pexpect.EOF, pexpect.TIMEOUT])
+        t = xfifo.FIFOWtEnd("/tmp/x7serverfun")
         while(1):
             i = child.readline()
+            #print len(i)
             if i:
-                t.write(i)
+                t.write(i.rstrip()+r"</br>")
             else:
-                t.write(str(request) +" end")
+                t.write("xendx")
+                #print("read to end")
                 break
         t.close()
 

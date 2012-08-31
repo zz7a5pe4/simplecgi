@@ -54,7 +54,7 @@ class FIFORdEnd:
 				raise
 			elif r:
 				data = os.read(self.rfd,1024)
-				if not data:
+				if data == "":
 					print "peer closed"
 				return data
 			else:
@@ -72,13 +72,13 @@ def test():
 
 	r = FIFORdEnd("xfifotest")
 	w = FIFOWtEnd("xfifotest")
-	r.close()
+
 	w.write("hello")
 	w.write("world")
-
+	w.close()
 	print r.read(1)
 	print r.read()
-	w.close()
+	
 
 	print r.read(1)
 	print r.read()

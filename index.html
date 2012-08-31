@@ -6,7 +6,7 @@
 	var toload = 0
          function refresh()
          {
-             post_to_url("http://127.0.0.1:8000/serverfun", {'q':'a'})
+             post_to_url("http://165.114.86.227:8000/serverfun", {'q':'a'})
 	     //document.getElementById('resultframe').src = 
 	     //"http://165.114.86.227:8081/esp"
 	     //toload = 1
@@ -48,11 +48,11 @@
   </head>
 <body>
 
-First name: <input type="text" name="FirstName" value="Mickey" /><br />
-Last name: <input type="text" name="LastName" value="Mouse" /><br />
+<!-- First name: <input type="text" name="FirstName" value="Mickey" /><br />
+Last name: <input type="text" name="LastName" value="Mouse" /><br /> -->
 <input type="submit" value="Submit" onclick="refresh()"/>
-
-<iframe name="h" id="resultframe"></iframe>
+</br>
+<iframe name="h" id="resultframe" width=800 height=600></iframe>
 
 </body>
 </html>
