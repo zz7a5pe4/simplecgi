@@ -1,4 +1,4 @@
-*.puc
+*.pyc
 *~
 who
 ls

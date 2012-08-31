@@ -6,6 +6,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SimpleHTTPServer
 import traceback,sys,os,select,socket
 import xfifo
+import cmdaemon
 
 #filename = os.path.join("/tmp", 'xxfifo')
 #fifo=os.open(filename,os.O_RDONLY|os.O_NONBLOCK)
@@ -88,13 +89,18 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         return
 
 def main():
-    try:
-        server = HTTPServer(('', 8000), MyHandler)
-        print 'started httpserver...'
-        server.serve_forever()
-    except KeyboardInterrupt:
-        print 'shutting down server'
-        server.socket.close()
+    pid = os.fork()
+    if pid:
+        try:
+            server = HTTPServer(('', 8000), MyHandler)
+            print 'started httpserver...'
+            server.serve_forever()
+        except KeyboardInterrupt:
+            print 'shutting down server'
+            server.socket.close()
+    else:
+        s = cmdaemon.ForkDaemon();
+        s.start()
 
 if __name__ == '__main__':
     main()
