@@ -13,15 +13,14 @@ import cmdaemon
 cmdclint_address_prefex = "/tmp/xcmdclient/"
 server_address = "/tmp/xcmdfifo"
 
-def transmsg(f):
+def transmsg(f, cmds):
     for x in range(1):
         msg="<p>hey, today is the " + str(time.localtime()[7]) + " day in the year " + str(time.localtime()[0]) + "</p>"
         r=chunkedwrap(msg)
         f.write(r)
-        time.sleep(1)
     
     result_fifo = xfifo.FIFORdEnd("x7serverfun")
-    my_address = os.path.join(cmdclint_address_prefex, 'servfun')
+    my_address = os.path.join(cmdclint_address_prefex, 'servfun') # for communicate with cmd daemon
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
     try:
         os.unlink(my_address)
@@ -36,7 +35,7 @@ def transmsg(f):
         print >>sys.stderr, msg
         sys.exit(1)
     
-    sock.sendall("who")
+    sock.sendall(cmds)
     data = sock.recv(16)
     print >>sys.stderr, 'received "%s"' % data
     sock.close()
@@ -79,7 +78,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 self.send_header('Transfer-Encoding', "chunked")
                 #self.send_header('Trailer',  'Expires')
                 self.end_headers()
-                transmsg(self.wfile)
+                transmsg(self.wfile, "who")
                 self.wfile.write(chunkedwrap(None))
             else:
                 self.send_error(404,'File Not Found: %s' % self.path)
