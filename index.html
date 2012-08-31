@@ -6,17 +6,17 @@
 	var toload = 0
          function refresh()
          {
-             post_to_url("http://165.114.86.227:8000/cgi-bin/serverfun.py", {'q':'a'})
+             post_to_url("http://127.0.0.1:8000/serverfun", {'q':'a'})
 	     //document.getElementById('resultframe').src = 
 	     //"http://165.114.86.227:8081/esp"
-	     toload = 1
+	     //toload = 1
          }
 	function readresult()
          {
 	    if (toload == 1)
 	    { 
              document.getElementById('resultframe').src = 
-             "http://165.114.86.227:8081/esp"
+             "http://127.0.0.1:8000/esp"
              toload = 0
 	    }
 
@@ -52,7 +52,7 @@ First name: <input type="text" name="FirstName" value="Mickey" /><br />
 Last name: <input type="text" name="LastName" value="Mouse" /><br />
 <input type="submit" value="Submit" onclick="refresh()"/>
 
-<iframe name="h" id="resultframe" onload="readresult()"></iframe>
+<iframe name="h" id="resultframe"></iframe>
 
 </body>
 </html>

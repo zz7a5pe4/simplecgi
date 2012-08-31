@@ -86,7 +86,7 @@ class CmdDaemon:
     poll_interval = 5;
     sock = 0;
     def __init__(self):
-        # open fifo async
+        # open uds socket
         filename = os.path.join("/tmp", 'xcmdfifo')
         print filename
         try:

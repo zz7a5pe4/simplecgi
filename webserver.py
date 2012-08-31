@@ -3,11 +3,19 @@
 import string,cgi,time
 from os import curdir, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-#import prii
+import CGIHTTPServer
 import traceback,sys,os,select
+import xfifo
 
-filename = os.path.join("/tmp", 'xxfifo')
-fifo=os.open(filename,os.O_RDONLY|os.O_NONBLOCK)
+#filename = os.path.join("/tmp", 'xxfifo')
+#fifo=os.open(filename,os.O_RDONLY|os.O_NONBLOCK)
+
+def transmsg(f):
+    for x in range(3):
+        msg="<p>hey, today is the " + str(time.localtime()[7]) + " day in the year " + str(time.localtime()[0]) + "</p>"
+        r=chunkedwrap(msg)
+        f.write(r)
+        time.sleep(1)
 
 def chunkedwrap(oldstr):
     if oldstr:
@@ -21,52 +29,31 @@ def chunkedwrap(oldstr):
     return ret
 
 
-class MyHandler(BaseHTTPRequestHandler):
-
-    def do_GET(self):
-        try:
-            if self.path==("/esp"):   #our dynamic content
-		self.protocol_version="HTTP/1.1"
-                self.send_response(200)
-                self.send_header('Content-type',	'text/html; charset=UTF-8')
-		self.send_header('Transfer-Encoding', "chunked")
-		self.send_header('Trailer',  'Expires')
-		self.end_headers()
-		while 1:
-		    x=os.read(fifo,1024)
-		    if x :
-			self.wfile.write(chunkedwrap(x))
-		    else:
-			break
-		self.wfile.write(chunkedwrap(None))
-            else:
-		self.send_error(404,'File Not Found: %s' % self.path)
-    	except:
-	    print("unknown error")
-	    traceback.print_exc(file=sys.stdout)
-	return
+class MyHandler(CGIHTTPServer.CGIHTTPRequestHandler):
 
 
     def do_POST(self):
         global rootnode
         try:
-            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
-            if ctype == 'multipart/form-data':
-                query=cgi.parse_multipart(self.rfile, pdict)
-            self.send_response(301)
-            
-            self.end_headers()
-            upfilecontent = query.get('upfile')
-            print "filecontent", upfilecontent[0]
-            self.wfile.write("<HTML>POST OK.<BR><BR>");
-            self.wfile.write(upfilecontent[0]);
-            
-        except :
-            pass
+            if self.path==("/serverfun"):   #our dynamic content
+                self.protocol_version="HTTP/1.1"
+                self.send_response(200)
+                self.send_header('Content-type',        'text/html; charset=UTF-8')
+                self.send_header('Transfer-Encoding', "chunked")
+                self.send_header('Trailer',  'Expires')
+                self.end_headers()
+                transmsg(self.wfile)
+                self.wfile.write(chunkedwrap(None))
+            else:
+                self.send_error(404,'File Not Found: %s' % self.path)
+        except:
+            print("unknown error")
+            traceback.print_exc(file=sys.stdout)
+        return
 
 def main():
     try:
-        server = HTTPServer(('', 8081), MyHandler)
+        server = HTTPServer(('', 8000), MyHandler)
         print 'started httpserver...'
         server.serve_forever()
     except KeyboardInterrupt:
