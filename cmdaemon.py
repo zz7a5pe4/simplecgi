@@ -81,7 +81,7 @@ class ForkingHandler:
             result_df.close()
 
 
-cmdmaps={"ls":"ls -l /home","pwd":"pwd","who":"w"}
+cmdmaps={"ls":"ls -l /home","pwd":"pwd","who":"w","x7":r"/home/xeven/deploy.sh"}
 class CmdDaemon:
     poll_interval = 5;
     sock = 0;
@@ -101,7 +101,7 @@ class CmdDaemon:
 
     def do_request(self, request, result_df):
         """ process request and write result to result_df """
-        child = pexpect.spawn (request)
+        child = pexpect.spawn (request, timeout=600)
         #index = p.expect ([pexpect.EOF, pexpect.TIMEOUT])
         t = xfifo.FIFOWtEnd("/tmp/x7serverfun")
         while(1):

@@ -20,13 +20,17 @@ def transmsg(f, cmds):
         f.write(r)
     
     result_fifo = xfifo.FIFORdEnd("x7serverfun")
+    
     my_address = os.path.join(cmdclint_address_prefex, 'servfun') # for communicate with cmd daemon
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
     try:
+        os.mkdir(cmdclint_address_prefex)
+    except OSError, e:
+        print "socket address give err: %s" % e
+    try:
         os.unlink(my_address)
     except OSError, e:
-        print "Failed to create FIFO: %s" % e
-
+        print "socket address give err: %s" % e
     sock.bind(my_address)
     #print >>sys.stderr, 'connecting to %s' % server_address
     try:
@@ -78,7 +82,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 self.send_header('Transfer-Encoding', "chunked")
                 #self.send_header('Trailer',  'Expires')
                 self.end_headers()
-                transmsg(self.wfile, "who")
+                transmsg(self.wfile, "x7")
                 self.wfile.write(chunkedwrap(None))
             else:
                 self.send_error(404,'File Not Found: %s' % self.path)
