@@ -16,7 +16,7 @@
             var form = document.createElement("form");
             form.setAttribute("method", method);
             form.setAttribute("action", path);
-	        form.setAttribute("target", "h");
+	        form.setAttribute("target", "resultframe");
             for(var key in params) {
                 if(params.hasOwnProperty(key)) {
                     var hiddenField = document.createElement("input");
@@ -31,6 +31,12 @@
             document.body.appendChild(form);
             form.submit();
         }
+
+        window.setInterval(function() {
+            var pos_y =  document.getElementById("resultframe").contentWindow.document.body.scrollHeight;
+            document.getElementById("resultframe").contentWindow.scrollTo(0, pos_y );
+           }, 1000 );
+
      </script>
   </head>
 <body>
@@ -39,7 +45,7 @@
 Last name: <input type="text" name="LastName" value="Mouse" /><br /> -->
 <input type="submit" value="Submit" onclick="refresh()"/>
 </br>
-<iframe name="h" id="resultframe" width=800 height=600></iframe>
+<iframe name="resultframe" id="resultframe" width=800 height=600></iframe>
 
 </body>
 </html>
