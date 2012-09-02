@@ -47,7 +47,7 @@ class FIFORdEnd:
 		mode = os.stat(self.fifoname).st_mode
 		
 
-	def read(self, timeout=600):
+	def read(self, timeout=5):
 		if self.rfd:
 			r,w,e = select.select([self.rd],[], [self.rd], timeout)
 			if e:

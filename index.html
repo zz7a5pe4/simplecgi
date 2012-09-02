@@ -3,10 +3,10 @@
   <head runat="server">
      <title>Lesson 1 - Demo 1 - IFrame "Ajax"</title>
      <script language="javascript">
-	var toload = 0
+
          function refresh()
          {
-             post_to_url("http://127.0.0.1:8000/serverfun", {'q':'a'})
+             post_to_url("http://127.0.0.1:8000/ping", {'q':'a'})
          }
 	function post_to_url(path, params, method) {
             method = method || "post"; // Set method to post by default, if not specified.

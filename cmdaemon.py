@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
-import os, socket, sys
+import os, socket, sys, time
 import pexpect
 import xfifo
+from cmdmapping import cmdmaps
 
 class ForkingHandler:
     timeout = 300
@@ -41,7 +42,7 @@ class ForkingHandler:
                 raise ValueError('%s. x=%d and list=%r' % (e.message, pid,
                                                            self.active_children))
 
-    def handle_error(self, request, result_df):
+    def handle_error(self, request):
         """Handle an error gracefully.  May be overridden.
 
         The default is to print a traceback and continue.
@@ -54,7 +55,7 @@ class ForkingHandler:
         traceback.print_exc() # XXX But this goes to stderr!
         print '-'*40
 
-    def process_request(self, request, result_df):
+    def process_request(self, cmd, resultaddr):
         """Fork a new subprocess to process the request."""
         self.collect_children()
         pid = os.fork()
@@ -68,40 +69,38 @@ class ForkingHandler:
             # Child process.
             # This must never return, hence os._exit()!
             try:
-                #t = open(result_df, "w")
-                self.do_request(request, result_df)
-                #t.close()
+                self.do_request(cmd, resultaddr)
                 os._exit(0)
             except:
                 print "exception occur"
                 try:
-                    self.handle_error(request, result_df)
+                    self.handle_error(cmd)
                 finally:
                     os._exit(1)
-            result_df.close()
 
 
-cmdmaps={"ls":"ls -l /home","pwd":"pwd","who":"w","x7":r"/home/xeven/deploy.sh"}
+
+
 class CmdDaemon:
     poll_interval = 5;
     sock = 0;
     def __init__(self):
         # open uds socket
-        filename = os.path.join("/tmp", 'xcmdfifo')
-        print filename
+        filename = "/tmp/xcmdqueue"
+        #print filename
         try:
             os.unlink(filename)
         except OSError, e:
-            print ""
+            pass
             # Create a UDS socket
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
         self.sock.bind(filename)
 
         #print "fd is " + str(self.sock.fileno())
 
-    def do_request(self, request, result_df):
+    def do_request(self, cmd, resultaddr):
         """ process request and write result to result_df """
-        child = pexpect.spawn (request, timeout=600)
+        child = pexpect.spawn (cmd, timeout=600)
         #index = p.expect ([pexpect.EOF, pexpect.TIMEOUT])
         t = xfifo.FIFOWtEnd("/tmp/x7serverfun")
         while(1):
@@ -119,20 +118,21 @@ class CmdDaemon:
         if not msg:
             return None, None
         #print "get msg:" + msg
-        req = None
-        req = cmdmaps[msg]
-        return req, msg
+        req = msg.split(r"_")
+        cmd = cmdmaps[req[0]]
+        print cmd, msg
+        return cmd, msg
 
 
     def start(self):
         while 1:
-            print >>sys.stderr, 'waiting for a connection'
+            print >>sys.stderr, 'waiting for a cmd from xcmdqueue:'
             data, client_address = self.sock.recvfrom(1024)
-            r, m = self.prepare_request(data)
+            cmd, raddr = self.prepare_request(data)
             print >>sys.stderr, 'connection from', client_address
             print >>sys.stderr, "receive ", data
             self.sock.sendto("done", client_address)
-            self.process_request(r,m)
+            self.process_request(cmd,raddr)
 
 
 class ForkDaemon(CmdDaemon, ForkingHandler): pass
