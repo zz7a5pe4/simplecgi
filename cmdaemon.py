@@ -102,7 +102,7 @@ class CmdDaemon:
         """ process request and write result to result_df """
         child = pexpect.spawn (cmd, timeout=600)
         #index = p.expect ([pexpect.EOF, pexpect.TIMEOUT])
-        t = xfifo.FIFOWtEnd("/tmp/x7serverfun")
+        t = xfifo.FIFOWtEnd(resultaddr)
         while(1):
             i = child.readline()
             #print len(i)

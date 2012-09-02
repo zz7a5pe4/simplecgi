@@ -2,12 +2,27 @@
 
 import string,cgi,time
 from os import curdir, sep
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from BaseHTTPServer import BaseHTTPRequestHandler
 import SimpleHTTPServer
 import traceback,sys,os,select,socket
 import xfifo
 import cmdaemon
 from cmdmapping import cmdmaps
+import SocketServer
+
+
+
+class HTTPServer(SocketServer.ForkingTCPServer):
+
+    allow_reuse_address = 1    # Seems to make sense in testing environment                                                                                 
+
+    def server_bind(self):
+        """Override server_bind to store the server name."""
+        SocketServer.TCPServer.server_bind(self)
+        host, port = self.socket.getsockname()[:2]
+        self.server_name = socket.getfqdn(host)
+        self.server_port = port
+
 
 
 cmdclint_address_prefex = "/tmp/xcmdclient/"
@@ -56,7 +71,7 @@ def transmsg(f, cmds):
         print "not support cmd"
         return
 
-    result_fifo = xfifo.FIFORdEnd("x7serverfun")
+    result_fifo = xfifo.FIFORdEnd(msg)
     while 1:
         s = result_fifo.read()
         if not s:
@@ -98,6 +113,8 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         global rootnode
         try:
             cmd = self.path[1:] 
+            print cmd
+            print cmdmaps.keys()
             if cmd in cmdmaps.keys():   #our dynamic content
                 self.protocol_version="HTTP/1.1"
                 self.send_response(200)
