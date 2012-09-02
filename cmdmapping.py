@@ -4,4 +4,5 @@ cmdmaps={"ls":"ls -l /home",
         "pwd":"pwd",
         "who":"w",
         "ping":"ping 127.0.0.1 -c 10",
+        "update":"apt-get update",
         "x7":"whoami"}
