@@ -1,115 +1,111 @@
 <!DOCTYPE html>
 <html>
-  <head runat="server">
-     <title>X7 One-Click Setup</title>
-     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
-     <script language="javascript">
-        var autoload = 0
-         function refresh()
-         {
-             document.getElementById('submitBtn').style.visibility='hidden';
-             post_to_url("http://127.0.0.1:8000/ping", {'q':'a'})
-             autoload = window.setInterval('autoscroll()', 1000)
-         }
-	function post_to_url(path, params, method) {
-            method = method || "post"; // Set method to post by default, if not specified.
-
-            // The rest of this code assumes you are not using a library.
-            // It can be made less wordy if you use one.
-            var form = document.createElement("form");
-            form.setAttribute("method", method);
-            form.setAttribute("action", path);
-	    form.setAttribute("target", "resultframe");
-            for(var key in params) {
-                if(params.hasOwnProperty(key)) {
-                    var hiddenField = document.createElement("input");
-                    hiddenField.setAttribute("type", "hidden");
-                    hiddenField.setAttribute("name", key);
-                    hiddenField.setAttribute("value", params[key]);
-                    form.appendChild(hiddenField);
-                 }
-            }
-
-            document.body.appendChild(form);
-            form.submit();
-        }
-
-        function autoscroll() {
-            var pos_y =  document.getElementById("resultframe").contentWindow.document.body.scrollHeight + 10;
-            document.getElementById("resultframe").contentWindow.scrollTo(0, pos_y );
-           }
-
-        function stop(){
-            autoscroll();
-            window.clearInterval(autoload)
-        }
-     </script>
-<style>
-body {
-    color:#444444;
-    font-size:13px;
-    background: #eee;
-    font-family:"Century Gothic", Helvetica, sans-serif;
-}
-h1 {
-    text-align: center;
-    color: #CCC;
-	font-size: 36px;
-	text-shadow: 1px 1px 1px white;
-	padding: 0px;
-	margin-top: 10px;
-	margin-bottom: 24px;
-}
-iframe {
-    display: block;
-    margin: 0 auto;
-    background-color: #e6e6e6;
-    width: 800px;
-    height: 400px;
-    border: 2px solid #fff;
-    -moz-box-shadow:0px 0px 3px #aaa;
-    -webkit-box-shadow:0px 0px 3px #aaa;
-    box-shadow:0px 0px 3px #aaa;
-    -moz-border-radius:10px;
-    overflow: scroll;
-}
-p {
-    text-align: center;
-}
-p input[type="submit"] {
-    border: none;
-    outline: none;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    color: #ffffff;
-    display: inline-block;
-    cursor:pointer;
-    padding: 7px 25px;
-    margin: 0px;
-    margin-top: 15px;
-    text-shadow: 0 1px 1px #777;
-    font-weight: bold;
-    font-family: "Century Gothic", Helvetica, sans-serif;
-    font-size: 22px;
-    -moz-box-shadow: 0px 0px 3px #aaa;
-    -webkit-box-shadow: 0px 0px 3px #aaa;
-    box-shadow: 0px 0px 3px #aaa;
-    background: #4797ED;
-}
-p input[type="submit"]:hover {
-    background:#d8d8d8;
-    color:#666;
-    text-shadow:1px 1px 1px #fff;
-}
-</style>
-
-  </head>
+<head runat="server">
+<meta charset="UTF-8">
+<title>X7 One-Click Setup</title>
+<link rel="shortcut icon" type="image/x-icon" href="./static/images/favicon.ico" />
+<link rel="stylesheet" href="./static/css/sliding.form.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="./static/css/style.css" type="text/css" media="screen"/>
+<script type="text/javascript" src="./static/js/jquery-1.7.min.js" ></script>
+<script type="text/javascript" src="./static/js/jquery.sliding.form.js" ></script>
+<script type="text/javascript" src="./static/js/submit.js" ></script>
+</head>
 <body>
-<p><img src="./X7cloud_logo.png" /></p>
-<h1>One-Click Setup</h1>
-<iframe name="resultframe" id="resultframe" width="800" height="400" onload="stop()"></iframe>
-<p><input type="submit" value="One-Click Setup" id="submitBtn" onclick="refresh()"/></p>
-
+<header>
+	<img src="./static/images/X7cloud_logo.png" title="X7 Logo" alt="X7 Logo" />
+	<h1>One-Click Setup</h1>
+</header>
+<article>
+	<div id="wrapper">
+		<div id="steps">
+			<form id="paramForm" name="paramForm">
+				<fieldset class="step">
+					<legend>Host</legend>
+					<p>
+					    <label for="HOST_IP">Server Host IP</label>
+					    <input id="HOST_IP" name="HOST_IP" type="text" placeholder="e.g. 192.168.1.100" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+					    <label for="MULTI_HOST">Multi Host</label>
+					    <input id="MULTI_HOST" name="MULTI_HOST" type="text" placeholder="e.g. 1" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+					    <label for="GLANCE_HOSTPORT">Glance Host Port</label>
+					    <input id="GLANCE_HOSTPORT" name="GLANCE_HOSTPORT" type="text" placeholder="e.g. 9292" AUTOCOMPLETE=OFF />
+					</p>
+				</fieldset>
+				<fieldset class="step">
+					<legend>Network</legend>
+					<p>
+					    <label for="FLAT_INTERFACE">Flat Interface</label>
+					    <input id="FLAT_INTERFACE" name="FLAT_INTERFACE" type="text" placeholder="e.g. eth0" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+					    <label for="FIXED_RANGE">Fixed Range</label>
+					    <input id="FIXED_RANGE" name="FIXED_RANGE" type="text" placeholder="e.g. 10.10.10.0/24" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+					    <label for="FIXED_NETWORK_SIZE">Fixed Network Size</label>
+					    <input id="FIXED_NETWORK_SIZE" name="FIXED_NETWORK_SIZE" type="text" placeholder="e.g. 256" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+					    <label for="FLOATING_RANGE">Floating Range</label>
+					    <input id="FLOATING_RANGE" name="FLOATING_RANGE" type="text" placeholder="e.g. 192.168.1.128/24" AUTOCOMPLETE=OFF />
+					</p>
+				</fieldset>
+				<fieldset class="step">
+					<legend>Database</legend>
+					<p>
+					    <label for="MYSQL_HOST">MySQL Server Address</label>
+					    <input id="MYSQL_HOST" name="MYSQL_HOST" type="text" placeholder="e.g. 192.168.1.100" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+					    <label for="MYSQL_PASSWORD">MySQL Root Password</label>
+					    <input id="MYSQL_PASSWORD" name="MYSQL_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
+					</p>
+				</fieldset>
+				<fieldset class="step">
+					<legend>Security</legend>
+					<p>
+					    <label for="SERVICE_TOKEN">Service Token</label>
+					    <input id="SERVICE_TOKEN" name="SERVICE_TOKEN" type="text" placeholder="e.g. xyzpdqlazydog" AUTOCOMPLETE=OFF />
+					</p>                          
+					<p>
+					    <label for="RABBIT_PASSWORD">Rabbit Password</label>
+					    <input id="RABBIT_PASSWORD" name="RABBIT_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+					    <label for="SERVICE_PASSWORD">Service Password</label>
+					    <input id="SERVICE_PASSWORD" name="SERVICE_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+					    <label for="ADMIN_PASSWORD">Dashboard Admin Password</label>
+					    <input id="ADMIN_PASSWORD" name="ADMIN_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
+					</p>
+				</fieldset>
+				<fieldset class="step">
+					<legend>Services</legend>
+					<p>
+						<label for="ENABLED_SERVICES">Enabled Services</label>
+						<textarea id="ENABLED_SERVICES" name="ENABLED_SERVICES"></textarea>
+					</p>
+				</fieldset>
+			</form>
+		</div>
+		<div id="navigation">
+			<ul>
+				<li class="selected"><a href="#">Host</a></li>
+				<li><a href="#">Network</a></li>
+				<li><a href="#">Database</a></li>
+				<li><a href="#">Security</a></li>
+				<li><a href="#">Services</a></li>
+			</ul>
+		</div>
+	</div>
+	<iframe name="resultframe" id="resultframe" width="800" height="400"></iframe>
+</article>
+<footer>
+	<input type="submit" value="One-Click Setup" id="submitBtn" name="submitBtn" />
+</footer>
 </body>
 </html>
