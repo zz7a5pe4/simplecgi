@@ -6,10 +6,11 @@ from BaseHTTPServer import BaseHTTPRequestHandler
 import SimpleHTTPServer
 import traceback,sys,os,select,socket
 import xfifo
+from pyutil import theIP
 import cmdaemon
 from cmdmapping import cmdmaps
 import SocketServer
-
+import urlparse
 
 
 class HTTPServer(SocketServer.ForkingTCPServer):
@@ -90,9 +91,6 @@ def transmsg(f, cmds):
 
     result_fifo.close()
 
-    
-
-
 def chunkedwrap(oldstr):
     #print "inchunked:" + str(oldstr)
     if oldstr:
@@ -107,6 +105,52 @@ def chunkedwrap(oldstr):
 
 
 class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+
+    def do_GET(self):
+        #p = self.path[1:]
+        if self.path[1:] == "ip_default":
+            self.send_response(200)
+            self.send_header('Content-type','text/html')
+            self.end_headers()
+            self.wfile.write(str(theIP("eth0"))) #call sample function here
+            return
+        elif self.path[1:11] == "test_query":
+            parsed_path = urlparse.urlparse(self.path)
+            message_parts = [
+                'CLIENT VALUES:',
+                'client_address=%s (%s)' % (self.client_address,
+                                            self.address_string()),
+                'command=%s' % self.command,
+                'path=%s' % self.path,
+                'real path=%s' % parsed_path.path,
+                'query=%s' % parsed_path.query,
+                'request_version=%s' % self.request_version,
+                '',
+                'SERVER VALUES:',
+                'server_version=%s' % self.server_version,
+                'sys_version=%s' % self.sys_version,
+                'protocol_version=%s' % self.protocol_version,
+                '',
+                'HEADERS RECEIVED:',
+                ]
+            for name, value in sorted(self.headers.items()):
+                message_parts.append('%s=%s' % (name, value.rstrip()))
+            message_parts.append('')
+            message = '\r\n'.join(message_parts)
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(message)
+        elif self.path[1:9] == "ip_query":
+            parsed_path = urlparse.urlparse(self.path)
+            self.send_response(200)
+            self.send_header('Content-type','text/html')
+            self.end_headers()
+            if "i=" in parsed_path.query:
+                iface= parsed_path.query.replace("i=","")
+            self.wfile.write(str(theIP(iface))) #call sample function here
+        else:
+            print super
+            SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
 
     def do_POST(self):
@@ -136,6 +180,7 @@ def main():
     if pid:
         try:
             server = HTTPServer(('', 8000), MyHandler)
+            global ipaddr
             print 'started httpserver...'
             server.serve_forever()
         except KeyboardInterrupt:
