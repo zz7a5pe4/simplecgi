@@ -44,7 +44,7 @@ article {
     background-color:#f9f9f9;
     width:800px;
     margin: 0 auto;
-    overflow:hidden;
+    overflow: hidden;
 }
 #steps{
     overflow:hidden;
@@ -91,8 +91,8 @@ article {
     box-shadow:0px 0px 3px #aaa;
 }
 #steps form p label{
+    display: inline-block;
     width:200px;
-    float:left;
     text-align:right;
     margin-right:15px;
     line-height:26px;
@@ -100,8 +100,24 @@ article {
     text-shadow:1px 1px 1px #fff;
     font-weight:bold;
 }
-#steps form input[type="text"],
-#steps form textarea {
+#steps form p label.radio_name {
+	display: inline;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+#steps form p label.textarea_name {
+	vertical-align: top;
+	display: none;
+}
+#steps form p label.volumn_choice {
+	display: inline;
+	margin-left: 8px;
+	margin-right: 100px;
+	vertical-align: middle;
+}
+#steps form input[type="text"] {
+    display: inline-block;
+    width: 300px;
     background: #ffffff;
     border: 1px solid #ddd;
     -moz-border-radius: 3px;
@@ -109,17 +125,38 @@ article {
     border-radius: 3px;
     outline: none;
     padding: 5px;
-    width: 300px;
-    float:left;
+    
+}
+#steps form input[type="radio"][name="Select_x7"] {
+	margin-left: -290px;
+	vertical-align: middle;
+}
+#steps form input[type="radio"][name="VOLUMN_SELECTED"] {
+	vertical-align: middle;
 }
 #steps form textarea {
-	height: 50px;
+	background: #ffffff;
+    border: 1px solid #ddd;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    outline: none;
+    padding: 5px;
+    width: 300px;
+	height: 60px;
+	display: none;
 }
 #steps form input:focus{
     -moz-box-shadow:0px 0px 3px #aaa;
     -webkit-box-shadow:0px 0px 3px #aaa;
     box-shadow:0px 0px 3px #aaa;
     background-color:#FFFEEF;
+}
+#steps form p label.hidden-1,
+#steps form p label.hidden-2,
+#steps form input[type="text"].hidden-1,
+#steps form input[type="text"].hidden-2 {
+	display: none;
 }
 #navigation{
     height:45px;

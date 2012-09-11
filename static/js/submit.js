@@ -1,7 +1,4 @@
-$(document).ready(function(){
-	
-	stop();
-	
+/**	
 	jQuery.ajax({
 		type: "post",
 		url: "http://127.0.0.1:8000/default",
@@ -39,6 +36,15 @@ $(document).ready(function(){
    			return;
    		}
 	});
+*/
+
+
+
+$(document).ready(function(){
+	X7Select();
+	volumnSelect();
+	stop();
+	getNetworkConfiguration();
 	
 	$("#submitBtn").click(function(){
 		//if there are errors don't allow the user to submit
@@ -53,6 +59,77 @@ $(document).ready(function(){
 		}
 	});
 });
+
+function getNetworkConfiguration(){
+	
+	$("#FLAT_INTERFACE").change(function(){
+		var flat_interface = $(this).val();
+		alert(flat_interface);
+		if(flat_interface != null || flat_interface != ""){
+			
+			jQuery.ajax({
+				type: "get",
+				url: "http://127.0.0.1:8000/ip_query?i="+flat_interface,
+				dataType: "text",
+				success: function(data, dataStatus){
+					var msgobj = JSON.parse(data);
+					
+					$("#FLAT_INTERFACE").val(msgobj.interface);
+					$("#FIXED_RANGE").val(msgobj.netmask);
+					$("#FIXED_NETWORK_SIZE").val(msgobj.ipaddr);
+					$("#FLOATING_RANGE").val(msgobj.brdcast);
+				},
+				complete: function(XMLHttpRequest, textStatus){
+					//HideLoading();
+		   		},
+		   		error: function(){
+		   			alert("Connection Error!");
+		   			return;
+		   		}
+			});
+		}
+	});
+}
+
+
+function X7Select() {
+	
+	var x7para = null;
+	
+	$("[name='Select_x7']").click(function(){
+		$("textarea").hide();
+		$(".textarea_name").hide();
+		
+		if($("[name='Select_x7']:checked")[0].checked){
+			$(this).nextAll("textarea").show();
+			$(this).nextAll("textarea").prev(".textarea_name").show();
+			
+			x7para = $(this).val();
+			return x7para;
+		}
+	});
+}
+
+function volumnSelect() {
+	var volumnpara = null;
+	
+	$(":radio[name='VOLUMN_SELECTED']").click(function(){
+		$(".hidden-1").hide();
+		$(".hidden-2").hide();
+		
+		if($(":radio[name='VOLUMN_SELECTED']:checked")[0].checked){
+			volumnpara = $(this).val();
+			if(volumnpara == "File"){
+				$(this).nextAll(".hidden-1").css("display","inline-block").show();
+			}
+			else if(volumnpara == "Device"){
+				$(this).nextAll(".hidden-2").css("display","inline-block").show();
+			}
+		}
+	});
+}
+
+
 
 var autoload = 0
 	

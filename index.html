@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head runat="server">
+<head>
 <meta charset="UTF-8">
 <title>X7 One-Click Setup</title>
 <link rel="shortcut icon" type="image/x-icon" href="./static/images/favicon.ico" />
@@ -20,18 +20,18 @@
 		<div id="steps">
 			<form id="paramForm" name="paramForm">
 				<fieldset class="step">
-					<legend>Host</legend>
+					<legend>Select X7</legend>
 					<p>
-					    <label for="HOST_IP">Server Host IP</label>
-					    <input id="HOST_IP" name="HOST_IP" type="text" placeholder="e.g. 192.168.1.100" AUTOCOMPLETE=OFF />
+					    <input id="X7_ALL_IN_ONE" name="Select_x7" type="radio" value="all" AUTOCOMPLETE=OFF />
+					    <label for="X7_ALL_IN_ONE" class="radio_name">All In One</label><br/>
+					    <label for="ENABLED_SERVICES" class="textarea_name">Enabled Services</label>
+						<textarea name="ENABLED_SERVICES" readonly="true">g-api,g-reg,key,n-api,n-crt,n-obj,n-net,n-vol,n-sch,n-cauth,horizon,mysql,rabbit,n-cpu,n-vol,n-novnc,n-xvnc</textarea>
 					</p>
 					<p>
-					    <label for="MULTI_HOST">Multi Host</label>
-					    <input id="MULTI_HOST" name="MULTI_HOST" type="text" placeholder="e.g. 1" AUTOCOMPLETE=OFF />
-					</p>
-					<p>
-					    <label for="GLANCE_HOSTPORT">Glance Host Port</label>
-					    <input id="GLANCE_HOSTPORT" name="GLANCE_HOSTPORT" type="text" placeholder="e.g. 9292" AUTOCOMPLETE=OFF />
+					    <input id="X7_ONLY_SERVER" name="Select_x7" type="radio" value="server" AUTOCOMPLETE=OFF />
+					    <label for="X7_ONLY_SERVER" class="radio_name">Only Server</label><br />
+					    <label for="ENABLED_SERVICES" class="textarea_name">Enabled Services</label>
+						<textarea name="ENABLED_SERVICES" readonly="true">g-api,g-reg,key,n-api,n-crt,n-obj,n-net,n-vol,n-sch,n-cauth,horizon,mysql,rabbit</textarea>
 					</p>
 				</fieldset>
 				<fieldset class="step">
@@ -54,22 +54,11 @@
 					</p>
 				</fieldset>
 				<fieldset class="step">
-					<legend>Database</legend>
-					<p>
-					    <label for="MYSQL_HOST">MySQL Server Address</label>
-					    <input id="MYSQL_HOST" name="MYSQL_HOST" type="text" placeholder="e.g. 192.168.1.100" AUTOCOMPLETE=OFF />
-					</p>
+					<legend>Security</legend>
 					<p>
 					    <label for="MYSQL_PASSWORD">MySQL Root Password</label>
 					    <input id="MYSQL_PASSWORD" name="MYSQL_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
 					</p>
-				</fieldset>
-				<fieldset class="step">
-					<legend>Security</legend>
-					<p>
-					    <label for="SERVICE_TOKEN">Service Token</label>
-					    <input id="SERVICE_TOKEN" name="SERVICE_TOKEN" type="text" placeholder="e.g. xyzpdqlazydog" AUTOCOMPLETE=OFF />
-					</p>                          
 					<p>
 					    <label for="RABBIT_PASSWORD">Rabbit Password</label>
 					    <input id="RABBIT_PASSWORD" name="RABBIT_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
@@ -84,21 +73,31 @@
 					</p>
 				</fieldset>
 				<fieldset class="step">
-					<legend>Services</legend>
+					<legend>Storage</legend>
 					<p>
-						<label for="ENABLED_SERVICES">Enabled Services</label>
-						<textarea id="ENABLED_SERVICES" name="ENABLED_SERVICES"></textarea>
+						<label for="SSD_PATH">SSD Path</label>
+						<input id="SSD_PATH" name="SSD_PATH" type="text" placeholder="e.g. /dev/sdb1" AUTOCOMPLETE=OFF />
+					</p>
+					<p>
+						<label for="VOLUMN_SELECTED">Select Volumn</label>
+						<input type="radio" id="SELECTED_FILE" name="VOLUMN_SELECTED" value="File" AUTOCOMPLETE=OFF />
+						<label for="SELECTED_FILE" class="volumn_choice">File</label>
+						<input type="radio" id="SELECTED_DEVICE" name="VOLUMN_SELECTED" value="Device" AUTOCOMPLETE=OFF />
+						<label for="SELECTED_DEVICE" class="volumn_choice">Device</label><br />
+						<label for="FILE_SIZE" class="hidden-1">Size</label>
+						<input type="text" id="FILE_SIZE" name="FILE_SIZE" class="hidden-1" placeholder="e.g. 2G" AUTOCOMPLETE=OFF />
+						<label for="DEVICE_PATH" class="hidden-2">Path</label>
+						<input type="text" id="DEVICE_PATH" name="DEVICE_PATH" class="hidden-2" placeholder="e.g. /dev/xxxx" AUTOCOMPLETE=OFF />
 					</p>
 				</fieldset>
 			</form>
 		</div>
 		<div id="navigation">
 			<ul>
-				<li class="selected"><a href="#">Host</a></li>
+				<li class="selected"><a href="#">Select X7</a></li>
 				<li><a href="#">Network</a></li>
-				<li><a href="#">Database</a></li>
 				<li><a href="#">Security</a></li>
-				<li><a href="#">Services</a></li>
+				<li><a href="#">Storage</a></li>
 			</ul>
 		</div>
 	</div>
