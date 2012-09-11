@@ -11,6 +11,7 @@ import cmdaemon
 from cmdmapping import cmdmaps
 import SocketServer
 import urlparse
+import json
 
 
 class HTTPServer(SocketServer.ForkingTCPServer):
@@ -149,7 +150,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 iface= parsed_path.query.replace("i=","")
             self.wfile.write(str(theIP(iface))) #call sample function here
         else:
-            print super
+            #print super
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
 
@@ -158,7 +159,13 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         try:
             cmd = self.path[1:] 
             print cmd
-            print cmdmaps.keys()
+            if cmd == "x7": # I know it' ugly. don't laugh at me
+                length = int(self.headers.getheader('content-length'))
+                usrcfg = self.rfile.read(length)
+                #print usrcfg.rstrip()
+                d = json.load(usrcfg.rstrip())
+                print d
+            #print cmdmaps.keys()
             if cmd in cmdmaps.keys():   #our dynamic content
                 self.protocol_version="HTTP/1.1"
                 self.send_response(200)
