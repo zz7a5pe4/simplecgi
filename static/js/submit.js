@@ -1,7 +1,8 @@
 $(document).ready(function(){
 	var fieldsetCount = $('#paramForm').children().length;
 	var autoload = 0;
-	
+	var jsonObj = "";
+
 	initConfigurationPage();
 	stop(); //init the iframe
 
@@ -42,6 +43,7 @@ $(document).ready(function(){
 			$("#wrapper").hide();
 			$("iframe").show();
 			postTheX7Configuration();
+			refresh();
 		}
 	});
 	
@@ -71,28 +73,28 @@ $(document).ready(function(){
 			volumn_selected_result = $("#DEVICE_PATH").val();
 		}
 		
-		var jsonObj = {"Select_x7":x7selected, "FLAT_INTERFACE":flat_interface, "FIXED_RANGE":fixed_range, "FIXED_NETWORK_SIZE":fixed_network_size,
+		jsonObj = {"Select_x7":x7selected, "FLAT_INTERFACE":flat_interface, "FIXED_RANGE":fixed_range, "FIXED_NETWORK_SIZE":fixed_network_size,
 				"MYSQL_PASSWORD":mysql_password,"RABBIT_PASSWORD":rabbit_password,"SERVICE_PASSWORD":service_password,"ADMIN_PASSWORD":admin_password,
 				"SSD_PATH":ssd_path, "VOLUMN_SELECTED":volumn_selected, "VOLUMN_SELECTED_RESULT":volumn_selected_result, "FLOATING_RANGE":floating_range};
 		
-		jQuery.ajax({
-			type: "post",
-			url: "http://127.0.0.1:8000/x7",
-			dataType: "json",
-			data: jsonObj,
+		// jQuery.ajax({
+		// 	type: "post",
+		// 	url: "http://127.0.0.1:8000/x7",
+		// 	dataType: "json",
+		// 	data: jsonObj,
 			
-			success: function(data, dataStatus){
-				//something
-				refresh();
-			},
-			complete: function(XMLHttpRequest, textStatus){
-				//HideLoading();
-	   		},
-	   		error: function(){
-	   			alert("Connection Error!");
-	   			return;
-	   		}
-		});
+		// 	success: function(data, dataStatus){
+		// 		//something
+		// 		//refresh();
+		// 	},
+		// 	complete: function(XMLHttpRequest, textStatus){
+		// 		//HideLoading();
+	 //   		},
+	 //   		error: function(){
+	 //   			//alert("Connection Error!");
+	 //   			//return;
+	 //   		}
+		// });
 	}
 	
 	/*
@@ -100,8 +102,8 @@ $(document).ready(function(){
 	 */
 	function refresh() {
 		document.getElementById('submitBtn').style.visibility='hidden';
-		post_to_url("http://127.0.0.1:8000/ping", {'q':'a'});
-		autoload = window.setInterval('autoscroll()', 1000);
+		post_to_url("http://127.0.0.1:8000/ping", jsonObj);
+		autoload = window.setInterval('autoscroll()', 100);
 	}
 	
 	function post_to_url(path, params, method) {
