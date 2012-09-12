@@ -102,7 +102,7 @@ $(document).ready(function(){
 	 */
 	function refresh() {
 		document.getElementById('submitBtn').style.visibility='hidden';
-		post_to_url("http://127.0.0.1:8000/ping", jsonObj);
+		post_to_url("http://127.0.0.1:8000/x7", jsonObj);
 		autoload = window.setInterval('autoscroll()', 100);
 	}
 	

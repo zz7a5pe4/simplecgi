@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 #Copyright Jon Berg , turtlemeat.com
 
 import string,cgi,time
@@ -113,7 +114,15 @@ def cfg2dic(s):
     return d
 
 def createrc(d):
-    c = open("testcfg","w")
+    if not d:
+        d = {}
+    tmpstr = d.get("SSD_PATH","")
+    if tmpstr:
+        tmpc = open("/home/xeven/x7env","w")
+        tmpc.write("SSDDEV={0}\n".format(tmpstr))
+        tmpc.close()
+
+    c = open("/home/xeven/localrc_server_template","w")
     
     tmpstr = d.get("FLAT_INTERFACE","eth0")
     ip = theIP(tmpstr)
