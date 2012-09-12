@@ -58,7 +58,7 @@ $(function() {
 			else{
 				validateStep(prev);
 			}
-			$('#paramForm').children(':nth-child('+ parseInt(current) +')').find(':input:first').focus();    
+			$('#paramForm').children(':nth-child('+ parseInt(current) +')').find(':input:first').focus();
         });
         e.preventDefault();
     });
@@ -88,7 +88,7 @@ $(function() {
             	FormErrors = true;
             }
         }
-        $('#paramForm').data('errors',FormErrors);       
+        $('#paramForm').data('errors',FormErrors);
     }
     
     /*
@@ -96,13 +96,24 @@ $(function() {
     and returns -1 if errors found, or 1 if not
     */
     function validateStep(step){
-        if(step == fieldsetCount) return;
+    	if(step == fieldsetCount) return;
         
         var error = 1;
         var hasError = false;
-        $('#paramForm').children(':nth-child('+ parseInt(step) +')').find(':input:not(button)').each(function(){
+        var radioChecked = 0;
+        $('#paramForm').children(':nth-child('+ parseInt(step) +')').find(':input:not(button):visible').each(function(){
             var $this = $(this);
             var valueLength = jQuery.trim($this.val()).length;
+            
+            if($this.is(":radio")){
+            	if(!$this[0].checked){
+            		radioChecked = radioChecked + 1;
+            	}
+            	
+            	if(radioChecked == 2){
+            		valueLength = '';
+            	}
+            }
             
             if(valueLength == ''){
                 hasError = true;

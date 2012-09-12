@@ -5,10 +5,6 @@
 <title>X7 One-Click Setup</title>
 <link rel="shortcut icon" type="image/x-icon" href="./static/images/favicon.ico" />
 <link rel="stylesheet" href="./static/css/sliding.form.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="./static/css/style.css" type="text/css" media="screen"/>
-<script type="text/javascript" src="./static/js/jquery-1.7.min.js" ></script>
-<script type="text/javascript" src="./static/js/jquery.sliding.form.js" ></script>
-<script type="text/javascript" src="./static/js/submit.js" ></script>
 </head>
 <body>
 <header>
@@ -42,34 +38,34 @@
 					</p>
 					<p>
 					    <label for="FIXED_RANGE">Fixed Range</label>
-					    <input id="FIXED_RANGE" name="FIXED_RANGE" type="text" placeholder="e.g. 10.10.10.0/24" AUTOCOMPLETE=OFF />
+					    <input id="FIXED_RANGE" name="FIXED_RANGE" type="text" placeholder="e.g. 10.10.10.0/24" value="10.10.10.0/24" AUTOCOMPLETE=OFF />
 					</p>
 					<p>
 					    <label for="FIXED_NETWORK_SIZE">Fixed Network Size</label>
-					    <input id="FIXED_NETWORK_SIZE" name="FIXED_NETWORK_SIZE" type="text" placeholder="e.g. 256" AUTOCOMPLETE=OFF />
+					    <input id="FIXED_NETWORK_SIZE" name="FIXED_NETWORK_SIZE" type="text" placeholder="e.g. 256" value="256" AUTOCOMPLETE=OFF />
 					</p>
-					<p>
+<!-- 				<p>
 					    <label for="FLOATING_RANGE">Floating Range</label>
 					    <input id="FLOATING_RANGE" name="FLOATING_RANGE" type="text" placeholder="e.g. 192.168.1.128/24" AUTOCOMPLETE=OFF />
-					</p>
+					</p>  -->
 				</fieldset>
 				<fieldset class="step">
 					<legend>Security</legend>
 					<p>
 					    <label for="MYSQL_PASSWORD">MySQL Root Password</label>
-					    <input id="MYSQL_PASSWORD" name="MYSQL_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
+					    <input id="MYSQL_PASSWORD" name="MYSQL_PASSWORD" type="text" placeholder="e.g. password" value="gadmei" AUTOCOMPLETE=OFF />
 					</p>
 					<p>
 					    <label for="RABBIT_PASSWORD">Rabbit Password</label>
-					    <input id="RABBIT_PASSWORD" name="RABBIT_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
+					    <input id="RABBIT_PASSWORD" name="RABBIT_PASSWORD" type="text" placeholder="e.g. password" value="guest" AUTOCOMPLETE=OFF />
 					</p>
 					<p>
 					    <label for="SERVICE_PASSWORD">Service Password</label>
-					    <input id="SERVICE_PASSWORD" name="SERVICE_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
+					    <input id="SERVICE_PASSWORD" name="SERVICE_PASSWORD" type="text" placeholder="e.g. password" value="gadmei" AUTOCOMPLETE=OFF />
 					</p>
 					<p>
 					    <label for="ADMIN_PASSWORD">Dashboard Admin Password</label>
-					    <input id="ADMIN_PASSWORD" name="ADMIN_PASSWORD" type="text" placeholder="e.g. password" AUTOCOMPLETE=OFF />
+					    <input id="ADMIN_PASSWORD" name="ADMIN_PASSWORD" type="text" placeholder="e.g. password" value="gadmei" AUTOCOMPLETE=OFF />
 					</p>
 				</fieldset>
 				<fieldset class="step">
@@ -90,6 +86,13 @@
 						<input type="text" id="DEVICE_PATH" name="DEVICE_PATH" class="hidden-2" placeholder="e.g. /dev/xxxx" AUTOCOMPLETE=OFF />
 					</p>
 				</fieldset>
+				<fieldset class="step">
+					<legend>Manual</legend>
+					<p>
+						If you don't customize your configuration, you will get the default configuration for x7.<br />
+						But you should fill the the blank, or you will not get the right installation.
+					</p>
+				</fieldset>
 			</form>
 		</div>
 		<div id="navigation">
@@ -98,6 +101,7 @@
 				<li><a href="#">Network</a></li>
 				<li><a href="#">Security</a></li>
 				<li><a href="#">Storage</a></li>
+				<li><a href="#">Manual</a></li>
 			</ul>
 		</div>
 	</div>
@@ -106,5 +110,8 @@
 <footer>
 	<input type="submit" value="One-Click Setup" id="submitBtn" name="submitBtn" />
 </footer>
+<script type="text/javascript" src="./static/js/jquery-1.7.min.js" ></script>
+<script type="text/javascript" src="./static/js/jquery.sliding.form.js" ></script>
+<script type="text/javascript" src="./static/js/submit.js" ></script>
 </body>
 </html>
