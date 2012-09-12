@@ -71,15 +71,14 @@ $(document).ready(function(){
 			volumn_selected_result = $("#DEVICE_PATH").val();
 		}
 		
-		var valueObj = {"Select_x7":x7selected, "FLAT_INTERFACE":flat_interface, "FIXED_RANGE":fixed_range, "FIXED_NETWORK_SIZE":fixed_network_size,
+		var jsonObj = {"Select_x7":x7selected, "FLAT_INTERFACE":flat_interface, "FIXED_RANGE":fixed_range, "FIXED_NETWORK_SIZE":fixed_network_size,
 				"MYSQL_PASSWORD":mysql_password,"RABBIT_PASSWORD":rabbit_password,"SERVICE_PASSWORD":service_password,"ADMIN_PASSWORD":admin_password,
 				"SSD_PATH":ssd_path, "VOLUMN_SELECTED":volumn_selected, "VOLUMN_SELECTED_RESULT":volumn_selected_result, "FLOATING_RANGE":floating_range};
-		var jsonObj = jQuery.parseJSON(valueObj);
 		
 		jQuery.ajax({
 			type: "post",
 			url: "http://127.0.0.1:8000/x7",
-			dataType: "text",
+			dataType: "json",
 			data: jsonObj,
 			
 			success: function(data, dataStatus){
