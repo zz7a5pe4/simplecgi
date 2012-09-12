@@ -104,6 +104,62 @@ def chunkedwrap(oldstr):
     #print "inchunked:" + ret
     return ret
 
+def cfg2dic(s):
+    l = s.replace(r"%2F",r'/').split("&")
+    d={}
+    for i in l:
+        k,v = i.split("=")
+        d[k]=v
+    return d
+
+def createrc(d):
+    c = open("testcfg","w")
+    
+    tmpstr = d.get("FLAT_INTERFACE","eth0")
+    ip = theIP(tmpstr)
+    c.write("HOST_IP={0}\n".format(ip.ipaddr))
+    c.write("FLAT_INTERFACE={0}\n".format(tmpstr))
+
+    tmpstr = d.get("FIXED_RANGE",r"10.10.10.0/24")
+    c.write("FIXED_RANGE={0}\n".format(tmpstr))
+
+    tmpstr = d.get("FIXED_NETWORK_SIZE",r"256")
+    c.write("FIXED_NETWORK_SIZE={0}\n".format(tmpstr))
+
+    tmpstr = d.get("FLOATING_RANGE", "{0}/25".format(ip.brdcast))
+    c.write("FLOATING_RANGE={0}\n".format(tmpstr))
+    c.write("MULTI_HOST=1\n")
+    c.write("SERVICE_TOKEN=xyzpdqlazydog\n")
+
+    tmpstr = d.get("MYSQL_PASSWORD","gadmei")
+    c.write("MYSQL_PASSWORD={0}\n".format(tmpstr))
+
+    tmpstr = d.get("RABBIT_PASSWORD","gadmei")
+    c.write("RABBIT_PASSWORD={0}\n".format(tmpstr))
+
+    tmpstr = d.get("ADMIN_PASSWORD","gadmei")
+    c.write("ADMIN_PASSWORD={0}\n".format(tmpstr))
+
+    tmpstr = d.get("SERVICE_PASSWORD","gadmei")
+    c.write("SERVICE_PASSWORD={0}\n".format(tmpstr))
+
+    servertype = d.get("Select_x7","server")
+    if servertype == "server":
+        c.write("ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-net,n-vol,n-sch,n-cauth,horizon,mysql,rabbit\n")
+    elif servertype == "all":
+        c.write("ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-net,n-vol,n-sch,n-cauth,horizon,mysql,rabbit,n-cpu,n-vol,n-novnc,n-xvnc\n")
+        c.write("MYSQL_HOST={0}\n".format(ip.ipaddr))
+        c.write("RABBIT_HOST={0}\n".format(ip.ipaddr))
+        c.write("GLANCE_HOSTPORT={0}:9292\n".format(ip.ipaddr))
+        c.write("SERVICE_HOST={0}\n".format(ip.ipaddr))
+        c.write("NOVNCPROXY_URL=http://{0}:6080/vnc_auto.html\n".format(ip.ipaddr))
+        c.write("XVPVNCPROXY_URL=http://{0}:6081/console\n".format(ip.ipaddr))
+    else:
+        print servertype
+        raise
+    c.close()
+
+
 
 class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
@@ -158,13 +214,15 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         global rootnode
         try:
             cmd = self.path[1:] 
-            print cmd
+            #print cmd
             if cmd == "x7": # I know it' ugly. don't laugh at me
                 length = int(self.headers.getheader('content-length'))
                 usrcfg = self.rfile.read(length)
-                #print usrcfg.rstrip()
-                d = json.load(usrcfg.rstrip())
-                print d
+                print usrcfg.rstrip()
+                #d = json.load(usrcfg.rstrip())
+                #print d
+                d = cfg2dic(usrcfg)
+                createrc(d)
             #print cmdmaps.keys()
             if cmd in cmdmaps.keys():   #our dynamic content
                 self.protocol_version="HTTP/1.1"

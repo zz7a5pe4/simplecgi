@@ -5,6 +5,4 @@ cmdmaps={"ls":"ls -l /home",
         "who":"w",
         "ping":"ping 127.0.0.1 -c 10",
         "update":"apt-get update",
-        "default":"cat /home/ryan/Git/zz7a5pe4/simplecgi/json_template",
-        "ip_query": "pyutil.py",
         "x7":"/home/xeven/deploy.sh"}
