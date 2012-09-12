@@ -5,6 +5,30 @@ $(document).ready(function(){
 	initConfigurationPage();
 	stop(); //init the iframe
 
+	$("#FLAT_INTERFACE").change(function(){
+		var flat_interface = $("#FLAT_INTERFACE").val();
+		if(flat_interface != "" || flat_interface != null){
+			
+			jQuery.ajax({
+				type: "get",
+				url: "http://127.0.0.1:8000/ip_query?i="+flat_interface,
+				dataType: "text",
+				
+				success: function(data, dataStatus){
+					var obj = JSON.parse(data);
+					$("#FLOATING_RANGE").val(obj.brdcast+"\/25");
+				},
+				complete: function(XMLHttpRequest, textStatus){
+					//do something
+				},
+				error: function(){
+					alert("Connection Error!");
+		   			return;
+				}
+			});
+		}
+	});
+	
 	$("#submitBtn").click(function(){
 		
 		validateSteps();
@@ -30,6 +54,7 @@ $(document).ready(function(){
 		var flat_interface = $("#FLAT_INTERFACE").val();
 		var fixed_range = $("#FIXED_RANGE").val();
 		var fixed_network_size = $("#FIXED_NETWORK_SIZE").val();
+		var floating_range = $("#FLOATING_RANGE").val();
 		
 		var mysql_password = $("#MYSQL_PASSWORD").val();
 		var rabbit_password = $("#RABBIT_PASSWORD").val();
@@ -48,7 +73,7 @@ $(document).ready(function(){
 		
 		var jsonObj = {"Select_x7":x7selected, "FLAT_INTERFACE":flat_interface, "FIXED_RANGE":fixed_range, "FIXED_NETWORK_SIZE":fixed_network_size,
 				"MYSQL_PASSWORD":mysql_password,"RABBIT_PASSWORD":rabbit_password,"SERVICE_PASSWORD":service_password,"ADMIN_PASSWORD":admin_password,
-				"SSD_PATH":ssd_path, "VOLUMN_SELECTED":volumn_selected, "VOLUMN_SELECTED_RESULT":volumn_selected_result};
+				"SSD_PATH":ssd_path, "VOLUMN_SELECTED":volumn_selected, "VOLUMN_SELECTED_RESULT":volumn_selected_result, "FLOATING_RANGE":floating_range};
 		
 		jQuery.ajax({
 			type: "post",
