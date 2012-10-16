@@ -152,6 +152,18 @@ def createrc(d):
     tmpstr = d.get("SERVICE_PASSWORD","gadmei")
     c.write("SERVICE_PASSWORD={0}\n".format(tmpstr))
 
+    tmpstr = d.get("VOLUMN_SELECTED",None)
+    if tmpstr == "File":
+        tmpstr = d.get("VOLUMN_SELECTED_RESULT","10G")
+        c.write("VOLUME_BACKING_FILE_SIZE={0}\n".format(tmpstr))
+    elif tmpstr == "":
+        tmpstr = d.get("VOLUMN_SELECTED_RESULT")
+        if tmpstr:
+            # create volume
+            pass
+    else:
+        pass
+
     servertype = d.get("Select_x7","server")
     if servertype == "server":
         c.write("ENABLED_SERVICES=g-api,g-reg,key,n-api,n-crt,n-obj,n-net,n-vol,n-sch,n-cauth,horizon,mysql,rabbit\n")
