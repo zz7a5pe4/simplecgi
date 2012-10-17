@@ -121,7 +121,7 @@ def createrc(d):
         tmpc = open("/home/xeven/x7env","w")
         tmpc.write("SSDDEV={0}\n".format(tmpstr))
         tmpc.close()
-
+    print d
     c = open("/home/xeven/localrc_server_template","w")
     
     tmpstr = d.get("FLAT_INTERFACE","eth0")
@@ -156,10 +156,10 @@ def createrc(d):
     if tmpstr == "File":
         tmpstr = d.get("VOLUMN_SELECTED_RESULT","10G")
         c.write("VOLUME_BACKING_FILE_SIZE={0}\n".format(tmpstr))
-    elif tmpstr == "":
-        tmpstr = d.get("VOLUMN_SELECTED_RESULT")
+    elif tmpstr == "Device":
+        tmpstr = d.get("VOLUMN_SELECTED_RESULT","")
         if tmpstr:
-            # create volume
+            c.write("VOLUMDEV={0}\n".format(tmpstr))
             pass
     else:
         pass
