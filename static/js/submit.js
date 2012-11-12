@@ -67,7 +67,7 @@ $(document).ready(function(){
 	function refresh(json) {
 		document.getElementById('submitBtn').style.visibility='hidden';
 		post_to_url("http://127.0.0.1:8000/x7", json);
-		autoload = window.setInterval('autoscroll()', 100);
+		autoload = window.setInterval(autoscroll, 100);
 	}
 
 	function post_to_url(path, params, method) {
@@ -98,6 +98,19 @@ $(document).ready(function(){
 		window.clearInterval(autoload);
 		$("#resultframe").hide();
 	}
+	
+	/*
+	 * auto scroll the iframe
+	 */
+	function autoscroll(){
+    	var pos_y =  document.getElementById("resultframe").contentWindow.document.body.scrollHeight + 10;
+    	document.getElementById("resultframe").contentWindow.scrollTo(0, pos_y );
+    	
+    	var content = document.getElementById("resultframe").contentWindow.document.body.innerHTML;
+    	if(content.indexOf("End of Cmd") >= 0){
+    		window.clearInterval(autoload);
+    	}
+    }
 	
 	/*
 	 * init the configuration of the setup pages.
@@ -229,10 +242,4 @@ $(document).ready(function(){
         $('<span class="'+valclass+'"></span>').insertAfter($link);
         return error;
     }
-	
 });
-
-function autoscroll() {
-	var pos_y =  document.getElementById("resultframe").contentWindow.document.body.scrollHeight + 10;
-	document.getElementById("resultframe").contentWindow.scrollTo(0, pos_y );
-}
